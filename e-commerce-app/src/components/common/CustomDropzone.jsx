@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import img from "../../assets/img/not-image.jpg";
+import img from "../../assets/img/not_image.jpg";
 
 const BASE_URL = "http://127.0.0.1:8000";
 

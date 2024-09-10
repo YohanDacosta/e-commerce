@@ -16,29 +16,35 @@ const SideBar = ({isOpen, toggleSideBar}) => {
                 </div>
                 <div className='flex w-full'>
                     <ul className='w-full my-4 ml-8 mr-2 space-y-2'>
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Home</li>
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>All Products</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Home</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>All Products</li>
                         <li className='flex flex-col items-start justify-between'>
                             <button type="button" className='flex justify-between w-full hover:bg-gray-300 py-2 px-4 rounded-sm' onClick={handleClickFoods}>
-                                <span className="">Foods</span>
+                                <span className="font-thin">Foods</span>
                                 <img className='mx-2 w-6 h-6' src={!openListFoods ? side_bar_toggle_up : side_bar_toggle_down} alt="side_bar_toggle" />
                             </button>
                             <ul id="dropdown-side-bar" className={`${openListFoods ? 'block' : 'hidden'} ml-4 py-2 space-y-1`}>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Meats and sausages</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Dairies and eggs</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Fish and seafood</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Oils and fats</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Vegetables, fruits and viands</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Breads</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Water, juices, malt and soft drinks</li>
-                                <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Cooking accessories</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Meats and sausages</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Dairies and eggs</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Fish and seafood</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Oils and fats</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Vegetables, fruits and viands</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Breads</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Water, juices, malt and soft drinks</li>
+                                <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Cooking accessories</li>
                             </ul>
                         </li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Personal and House grooming</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Electrical appliances</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Hardware stores</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Liquoreria</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Offers</li>
                         <hr />
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Personal and House grooming</li>
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Electrical appliances</li>
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Hardware stores</li>
-                        <li className='hover:bg-gray-300 py-2 px-4 rounded-sm'>Liquoreria</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Catalogue</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Wallet MarKuba</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Rewards</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Payment</li>
+                        <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Shipment</li>
                     </ul>
                 </div>
             </div>
