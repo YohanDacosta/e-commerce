@@ -1,21 +1,82 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { logo, menu_bar, location, wallet, cart, user, search, side_bar_toggle_up } from '../../assets';
+import { logo, menu_bar, location, wallet, cart, user, search, side_bar_toggle_up, close, trash, box_empty } from '../../assets';
 
 const MenuNav = ({toggleSideBar, toggleLocate}) => {
     const [showProducts, setShowProducts] = useState(false);
     const [showModalFoods, setShowModalFoods] = useState(false);
+    const [showModalUser, setShowModalUser] = useState(false);
+    const [showModalCart, setShowModalCart] = useState(false);
 
     const handleClick = () => {
         setShowProducts(!showProducts);
+    }
+    const handleClickCart = () => {
+        setShowModalCart(!showModalCart);
     }
 
     const handleMouseEnterFoods = () => {
         setShowModalFoods(!showModalFoods);
     }
+    const handleMouseEnterUser = () => {
+        setShowModalUser(!showModalUser);
+    }
 
     const handleMouseLeaveFoods = () => {
         setShowModalFoods(false);
+    }
+
+    const handleMouseLiveModals = () => {
+        if (!showModalFoods) {
+            setShowProducts(false);
+        }
+    }
+
+    const ModalUser = () => {
+        return (
+            <div className="flex absolute top-14 z-50 right-4 bg-gray-100 rounded-md py-6 px-4 font-thin shadow-md" onMouseLeave={handleMouseEnterUser}>
+                <div className="flex flex-col items-center justify-center space-y-3">
+                    <button className="flex bg-green-300 rounded-md w-[50%] py-2 items-center justify-center hover:bg-green-400 transition-colors duration-500">Log in</button>
+                    <span>Don't have an account yet?</span> 
+                    <button className="border border-green-300 py-2 px-12 hover:border-green-500 transition-colors duration-500">Sign up</button>
+                </div>
+            </div>
+        )
+    }
+
+    const ModalCart = () => {
+        return (
+            <div className="flex flex-col absolute right-0 top-0 h-full w-full z-50 bg-gray-100 font-thin justify-between md:w-[450px] lg:w-[450px]">
+                <div>
+                    <div className="flex flex-row w-full py-2 px-4">
+                        <div className="flex flex-col space-y-2 w-[50%]">
+                            <span className="flex">My Cart</span>
+                            <span className="flex text-green-500">Products (0)</span>
+                        </div>
+                        <div className='flex flex-row h-[50px] w-[50%] items-center justify-evenly px-2'>
+                            <div className="flex bg-gray-200 bg-opacity-100 shadow-md px-3 py-1 rounded-md space-x-2 items-center hover:cursor-pointer hover:bg-gray-300 transition-colors duration-500 ease-in-out">
+                                <img className='hover:cursor-pointer h-4' src={trash} alt="close" />
+                                <span>Clean Cart</span>
+                            </div>
+                            <a className='flex h-6 justify-end'><img className='hover:cursor-pointer' onClick={handleClickCart} src={close} alt="close" /></a>
+                        </div> 
+                    </div>
+                    <div className="flex flex-col items-center justify-center py-12 m-12 space-y-6">
+                        <div className="relative top-0">
+                            <img className='w-48' src={box_empty} alt="box" />
+                            <div className="flex justify-center">
+                                <span className=" absolute bottom-2">Empty Cart</span>
+                            </div>
+                        </div>
+                        <button className="flex bg-green-300 hover:bg-green-500 transition-colors duration-500 ease-in-out py-2 px-8 rounded-lg">Buy Now</button>
+                    </div>
+                </div>
+                <div className="flex flex-col max-w-full justify-center items-center space-y-4 mx-4 my-6">
+                    <button className="w-full hover:border-green-700 transition-colors duration-500 ease-in-out shadow-md border border-green-300 py-2 rounded-md">Continue shopping</button>
+                    <button className="w-full hover:bg-green-500 transition-colors duration-500 ease-in-out shadow-md bg-green-300 py-2 rounded-md">Sell <span className="bg-green-500 rounded-2xl px-4 py-0.5 ml-2 font-normal">0.00 USD</span></button>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -31,9 +92,11 @@ const MenuNav = ({toggleSideBar, toggleLocate}) => {
                         <div className="md:absolute md:right-0 first:flex gap-1 mr-6 md:mr-12">
                                 <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={location} alt="Location" onClick={toggleLocate}/></button>
                                 <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={wallet} alt="Location" /></button>
-                                <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={cart} alt="Location" /></button>
-                                <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={user} alt="Location" /></button>
+                                <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={cart} alt="Location" onClick={handleClickCart}/></button>
+                                <button className=" hover:bg-gray-100 rounded-full p-2"><img className="h-[28px] w-[28px]" src={user} alt="Location" onClick={handleMouseEnterUser}/></button>
                         </div>
+                        {showModalUser ? <ModalUser /> : ''}
+                        {showModalCart ? <ModalCart /> : ''}
                     </div>
 
                     <div className="md:relative  md:bottom-3 md:right-[32.5%] flex-row w-full h-[50%] m-4 items-center justify-center">
@@ -67,7 +130,7 @@ const MenuNav = ({toggleSideBar, toggleLocate}) => {
                         {showProducts ?
                         (
                             <>
-                                <div className="hidden lg:flex absolute left-4 top-32 z-50 bg-white border rounded-md shadow-sm px-4 py-2">
+                                <div className="hidden lg:flex absolute left-4 top-32 z-50 bg-white border rounded-md shadow-sm px-4 py-2" onMouseLeave={handleMouseLiveModals}>
                                     <div className="flex">
                                             <ul className='flex flex-col font-thin space-y-2'>
                                                 <Link className="hover:bg-gray-100 rounded-sm px-2" to="/" onMouseEnter={handleMouseEnterFoods}>Foods</Link>
@@ -80,7 +143,7 @@ const MenuNav = ({toggleSideBar, toggleLocate}) => {
                                     </div>
                                 </div>
                                 {showModalFoods ? (
-                                    <div className="hidden lg:flex absolute left-[280px] top-32 z-50 bg-white border rounded-md shadow-sm px-4 py-2">
+                                    <div className="hidden lg:flex absolute left-[280px] top-32 z-50 bg-white border rounded-md shadow-sm px-4 py-2" onMouseLeave={handleMouseLeaveFoods}>
                                         <div className="flex">
                                                 <ul className='flex flex-col font-thin space-y-2'>
                                                     <li className='font-thin hover:bg-gray-300 py-2 px-4 rounded-sm'>Meats and sausages</li>
