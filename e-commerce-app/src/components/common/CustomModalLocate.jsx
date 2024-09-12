@@ -2,7 +2,7 @@ import React from 'react'
 
 const CustomModalLocate = ({toggleLocate}) => {
   return (
-    <div className='flex absolute top-0 w-full h-screen z-50 justify-center items-center bg-transparent'>
+    <div className='flex absolute top-5 w-full h-screen z-50 justify-center items-center bg-transparent'>
         <div className='flex my-4 p-6 bg-gray-100 shadow-lg max-h-max max-w-sm items-center rounded-md'>
             <div className='flex-col space-y-8 font-thin'>
                 <div className='flex-col space-y-2'>

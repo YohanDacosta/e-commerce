@@ -1,18 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { logo, menu_bar, location, wallet, cart, user, search, side_bar_toggle_up, close, trash, box_empty } from '../../assets';
+import CustomModalLocate from "../common/CustomModalLocate";
 
-const MenuNav = ({toggleSideBar, toggleLocate}) => {
+const MenuNav = ({toggleSideBar}) => {
     const [showProducts, setShowProducts] = useState(false);
     const [showModalFoods, setShowModalFoods] = useState(false);
     const [showModalUser, setShowModalUser] = useState(false);
     const [showModalCart, setShowModalCart] = useState(false);
+    const [showModalLocate, setShowModalLocate] = useState(false);
 
     const handleClick = () => {
         setShowProducts(!showProducts);
     }
     const handleClickCart = () => {
         setShowModalCart(!showModalCart);
+    }
+
+    const toggleLocate = () => {
+        setShowModalLocate(!showModalLocate);
     }
 
     const handleMouseEnterFoods = () => {
@@ -171,6 +177,8 @@ const MenuNav = ({toggleSideBar, toggleLocate}) => {
                         </ul>
                       </div>
                 </div>
+        {showModalLocate ? <CustomModalLocate toggleLocate={toggleLocate} /> : ''}
+
             </div>
         </>
     );
