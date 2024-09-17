@@ -10,10 +10,12 @@ export default function App() {
   }
   
   return (
-    <div className="flex flex-col h-screen w-full">
+    <div className="flex flex-col h-full w-full">
         <MenuNav toggleSideBar={toggleSideBar} />
-        <SideBar isOpen={openSiderBar} toggleSideBar={toggleSideBar} />
-        <Body />
+        <div className="flex justify-center">
+          <SideBar isOpen={openSiderBar} toggleSideBar={toggleSideBar} />
+          <Body />
+        </div>
     </div>
 
   )

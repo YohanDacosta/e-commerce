@@ -47,7 +47,7 @@ const CustomCarousel = () => {
   }, []);
 
   return (
-    <div className="flex h-[30rem] md:h-[48rem] lg:h-[22rem] lg:w-[88rem] shadow-lg w-full mx-auto object-contain object-center overflow-hidden">
+    <div className="flex h-[30rem] md:h-[48rem] lg:h-[22rem] lg:w-[88rem] shadow-lg w-full mx-auto object-contain object-center overflow-hidden -z-30">
       <div className="flex w-full relative">
         <img
           className="flex w-full object-fill object-center"

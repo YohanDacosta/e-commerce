@@ -8,6 +8,8 @@ import wallet from './img/wallet.svg';
 import location from './img/location.svg';
 import menu_bar from './img/menu_bar.svg';
 import box_empty from './img/box_empty.svg';
+import star_black from './img/star_black.svg';
+import star_white from './img/star_white.svg';
 import toggle_left from './img/toggle_left.svg';
 import toggle_right from './img/toggle_right.svg';
 import side_bar_toggle_up from './img/side_bar_toggle_up.svg';
@@ -20,4 +22,4 @@ import img_carousel_large_1 from './img/img_carousel_large_1.jpeg';
 import img_carousel_large_2 from './img/img_carousel_large_2.jpeg';
 import img_carousel_large_3 from './img/img_carousel_large_3.jpeg';
 
-export { logo, not_image, menu_bar, location, cart, user, wallet, search, close, side_bar_toggle_up, side_bar_toggle_down, trash, box_empty, toggle_left, toggle_right, img_carousel_1, img_carousel_2, img_carousel_3, img_carousel_large_1, img_carousel_large_2, img_carousel_large_3 };
+export { logo, not_image, menu_bar, location, cart, user, wallet, search, close, side_bar_toggle_up, side_bar_toggle_down, trash, box_empty, toggle_left, toggle_right, img_carousel_1, img_carousel_2, img_carousel_3, img_carousel_large_1, img_carousel_large_2, img_carousel_large_3, star_white, star_black };

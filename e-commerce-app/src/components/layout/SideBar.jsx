@@ -9,7 +9,7 @@ const SideBar = ({isOpen, toggleSideBar}) => {
     }
 
     return (
-        <aside className={`transition-all duration-500 ease-in-out transform ${isOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0' } absolute top-0 left-0 bg-gray-100 h-[100%] max-h-[100%] w-[100%] max-w-[400px] overflow-scroll`}>
+        <aside className={`transition-all duration-500 ease-in-out transform ${isOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0' } absolute top-0 left-0 bg-gray-100 min-h-lvh max-h-full w-[100%] max-w-[400px] overflow-scroll`}>
             <div className='flex-col'>
                 <div className='flex-row h-[50px] px-6 py-3 w-full'>
                     <a className='flex h-[30px] justify-end'><img className='hover:cursor-pointer' onClick={toggleSideBar} src={close} alt="close" /></a>
