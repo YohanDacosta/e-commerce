@@ -8,22 +8,33 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    validationContext: ['groups' => ['orderItem:write']],
+    normalizationContext: ['groups' => ['orderItem:read']]
+)]
 class OrderItem
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Groups(groups: ['orderItem:read', 'order:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'The quantity field should not be blank.', groups: ['orderItem:write'])]
+    #[Groups(groups: ['orderItem:read', 'orderItem:write'])]
     private ?int $quantity = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank(message: 'The unit price field should not be blank.', groups: ['orderItem:write'])]
+    #[Groups(groups: ['orderItem:read', 'orderItem:write'])]
     private ?string $unitPrice = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['orderItem:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -31,10 +42,14 @@ class OrderItem
 
     #[ORM\ManyToOne(inversedBy: 'orderItem')]
     #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[Assert\NotBlank(message: 'The solicit field should not be blank.', groups: ['orderItem:write'])]
+    #[Groups(groups: ['orderItem:read', 'orderItem:write'])]
     private ?Order $solicit = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderItem')]
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false)]
+    #[Assert\NotBlank(message: 'The product field should not be blank.', groups: ['orderItem:write'])]
+    #[Groups(groups: ['orderItem:read', 'orderItem:write'])]
     private ?Product $product = null;
 
     public function __construct()

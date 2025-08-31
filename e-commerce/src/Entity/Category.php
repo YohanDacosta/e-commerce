@@ -9,25 +9,35 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    validationContext: ['groups' => ['category:write']],
+    normalizationContext: ['groups' => ['category:read']]
+)]
 class Category
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Groups(groups: ['category:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'The name field should not be blank.', groups: ['category:write'])]
+    #[Groups(groups: ['category:read', 'category:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(groups: ['category:read', 'category:write'])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
+    #[Groups(groups: ['category:read'])]
     private Collection $product;
 
     public function __construct()

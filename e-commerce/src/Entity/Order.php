@@ -11,23 +11,34 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-#[ApiResource()]
+#[ApiResource(
+    validationContext: ['groups' => ['order:write']],
+    normalizationContext: ['groups' => ['order:read']]
+)]
 class Order
 {
     #[ORM\Id]
     #[ORM\Column( type: 'uuid')]
+    #[Groups(groups: ['order:read', 'orderItem:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(enumType: Status::class)]
+    #[Assert\NotBlank(message: 'The status field should not be blank.', groups: ['order:write'])]
+    #[Groups(groups: ['order:read', 'order:write'])]
     private ?Status $status = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank(message: 'The total field should not be blank.', groups: ['order:write'])]
+    #[Groups(groups: ['order:read', 'order:write'])]
     private ?string $total = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['order:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -37,6 +48,7 @@ class Order
      * @var Collection<int, OrderItem>
      */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'solicit')]
+    #[Groups(groups: ['order:read'])]
     private Collection $orderItem;
 
     public function __construct() {

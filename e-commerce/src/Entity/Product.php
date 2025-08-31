@@ -9,48 +9,66 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    validationContext: ['groups' => ['product:write']],
+    normalizationContext: ['groups' => ['product:read']]
+)]
 class Product
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+     #[Groups(groups: ['product:read', 'orderItem:read', 'category:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'The name field should not be blank.', groups: ['product:write'])]
+     #[Groups(groups: ['product:read', 'product:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+     #[Groups(groups: ['product:read', 'product:write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+     #[Assert\NotBlank(message: 'The price field should not be blank.', groups: ['product:write'])]
+     #[Groups(groups: ['product:read', 'product:write'])]
     private ?string $price = null;
 
     #[ORM\Column(nullable: true)]
+     #[Groups(groups: ['product:read', 'product:write'])]
     private ?int $stock = null;
 
     #[ORM\Column]
+     #[Groups(groups: ['product:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+     #[Groups(groups: ['product:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
+     #[Assert\NotBlank(message: 'The category field should not be blank.', groups: ['product:write'])]
+     #[Groups(groups: ['product:read', 'product:write'])]
     private ?Category $category = null;
 
     /**
      * @var Collection<int, OrderItem>
      */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
+     #[Groups(groups: ['product:write'])]
     private Collection $orderItem;
 
     public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->createdAt = new DateTimeImmutable('now');
+        $this->stock = 0;
         $this->orderItem = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?Uuid
