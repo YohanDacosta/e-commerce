@@ -10,7 +10,7 @@
     "api-platform/doctrine-orm": "^4.1.22",
     "api-platform/symfony": "^4.1.22",
     "doctrine/dbal": "^3.10.1",
-    "doctrine/doctrine-bundle": "^2.15.1",
+    "doctrine/doctrine-bundle": "^2.16.0",
     "doctrine/doctrine-migrations-bundle": "^3.4.2",
     "doctrine/orm": "^3.5.2",
     "lexik/jwt-authentication-bundle": "^3.1.1",
@@ -31,7 +31,8 @@
     "symfony/twig-bundle": "7.2.*",
     "symfony/uid": "7.2.*",
     "symfony/validator": "7.2.*",
-    "symfony/yaml": "7.2.*"
+    "symfony/yaml": "7.2.*",
+    "vich/uploader-bundle": "^2.8"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.64"

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\State\Processor\Api\User;
+namespace App\State\Processor\User;
 
 use ApiPlatform\State\ProcessorInterface;
 

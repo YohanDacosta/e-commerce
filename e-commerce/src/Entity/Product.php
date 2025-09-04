@@ -2,66 +2,111 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ProductRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\HttpFoundation\File\File;
+use App\Controller\ProductUploadController;
+use App\Repository\ProductRepository;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    validationContext: ['groups' => ['product:write']],
-    normalizationContext: ['groups' => ['product:read']]
+    normalizationContext: ['groups' => ['product:read']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(
+            validationContext: ['groups' => ['product:create']],
+        ),
+        new Post(
+            uriTemplate: '/product/file/update',
+            controller: ProductUploadController::class,
+            deserialize: false
+        ),
+        new Patch(
+            validationContext: ['groups' => ['product:update']],
+        ),
+        new Delete(),
+    ]
 )]
 class Product
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-     #[Groups(groups: ['product:read', 'orderItem:read', 'category:read'])]
+    #[Groups(groups: ['product:read', 'orderItem:read', 'category:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(message: 'The name field should not be blank.', groups: ['product:write'])]
-     #[Groups(groups: ['product:read', 'product:write'])]
+    #[Assert\NotBlank(message: 'The name field should not be blank.', groups: ['product:create', 'product:update'])]
+    #[Groups(groups: ['product:read', 'product:create'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-     #[Groups(groups: ['product:read', 'product:write'])]
+    #[Groups(groups: ['product:read', 'product:create'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-     #[Assert\NotBlank(message: 'The price field should not be blank.', groups: ['product:write'])]
-     #[Groups(groups: ['product:read', 'product:write'])]
+    #[Assert\NotBlank(message: 'The price field should not be blank.', groups: ['product:create', 'product:update'])]
+    #[Groups(groups: ['product:read', 'product:create'])]
     private ?string $price = null;
 
     #[ORM\Column(nullable: true)]
-     #[Groups(groups: ['product:read', 'product:write'])]
+    #[Groups(groups: ['product:read', 'product:create'])]
     private ?int $stock = null;
 
     #[ORM\Column]
-     #[Groups(groups: ['product:read'])]
+    #[Groups(groups: ['product:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-     #[Groups(groups: ['product:write'])]
+    #[Groups(groups: ['product:create'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
-     #[Assert\NotBlank(message: 'The category field should not be blank.', groups: ['product:write'])]
-     #[Groups(groups: ['product:read', 'product:write'])]
+    #[Assert\NotBlank(message: 'The category field should not be blank.', groups: ['product:create'])]
+    #[Groups(groups: ['product:read', 'product:create'])]
     private ?Category $category = null;
 
     /**
      * @var Collection<int, OrderItem>
      */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
-     #[Groups(groups: ['product:write'])]
+    #[Groups(groups: ['product:create'])]
     private Collection $orderItem;
+
+    #[ApiProperty(types: ['https://schema.org/contentUrl'], writable: false)]
+    #[Groups(groups: ['product:read'])]
+    public ?string $contentUrl = null;
+
+    #[Vich\UploadableField(mapping: 'product', fileNameProperty: 'filePath')]
+    #[Assert\NotNull(message: "The file field should not be blank.", groups: ['product:create', 'product:file'])]
+    #[Assert\File(
+        maxSize: "2M",
+        mimeTypes: ["image/jpeg", "image/png"],
+        mimeTypesMessage: "Only images of type JPG o PNG.",
+        maxSizeMessage: "The image must not be major than 2MB.",
+        groups: ['product:create', 'product:file']
+    )]
+    #[Groups(groups: ['product:create', 'product:file'])]
+    public ?File $file = null;
+
+    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    public ?string $filePath = null;
 
     public function __construct()
     {
@@ -158,6 +203,27 @@ class Product
         $this->category = $category;
 
         return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(File $file): static
+    {
+        $this->file = $file;
+
+        if ($file !== null) {
+            $this->updatedAt = new DateTimeImmutable('now');
+        }
+
+        return $this;
+    }
+
+    public function getContentUrl(): ?string
+    {
+        return $this->filePath ? '/uploads/products/' . $this->filePath : null;
     }
 
     /**

@@ -23,6 +23,10 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-  App\State\Processor\Api\User\UserPostProcessor:
+  App\State\Processor\User\UserPostProcessor:
     arguments:
       $persistProcessor: "@api_platform.doctrine.orm.state.persist_processor"
+
+  App\Serializer\MediaObjectNormalizer:
+    arguments:
+      $normalizer: "@api_platform.jsonld.normalizer.item"

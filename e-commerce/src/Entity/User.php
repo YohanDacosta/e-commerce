@@ -8,16 +8,16 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
-use App\Dto\Api\UserDto;
+use App\Dto\UserDto;
 use App\Repository\UserRepository;
-use App\State\Processor\Api\User\UserPostProcessor;
+use App\State\Processor\User\UserPostProcessor;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
-use App\State\Processor\Api\User\UserPatchProcessor;
+use App\State\Processor\User\UserPatchProcessor;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
