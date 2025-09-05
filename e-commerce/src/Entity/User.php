@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -18,8 +19,11 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use App\State\Processor\User\UserPatchProcessor;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
@@ -81,6 +85,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[Vich\UploadableField(mapping: 'user', fileNameProperty: 'filePath')]
+    private ?File $file = null;
+
+    #[ApiProperty(writable: false)]
+    #[ORM\Column(nullable: true)]
+    public ?string $filePath = null;
+
+    #[ApiProperty(types: ['https://schema.org/contentUrl'], writable: false)]
+    #[Groups(groups: ['user:read'])]
+    public ?string $contentUrl = null;
 
     public function __construct()
     {
@@ -216,6 +231,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file): static
+    {
+        $this->file = $file;
+
+        if ($file !== null) {
+            $this->updatedAt = new DateTimeImmutable('now');
+        }
+
+        return $this;
+    }
+
+    public function getContentUrl(): ?string
+    {
+        return $this->filePath ? '/uploads/users/' . $this->filePath : null;
     }
 
     public function eraseCredentials(): void

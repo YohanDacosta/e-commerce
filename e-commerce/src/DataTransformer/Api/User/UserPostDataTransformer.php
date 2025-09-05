@@ -3,7 +3,7 @@
 namespace App\DataTransformer\Api\User;
 
 use App\Entity\User;
-use App\Dto\Api\UserDto;
+use App\Dto\UserDto;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use ApiPlatform\Validator\ValidatorInterface;
 
@@ -17,11 +17,13 @@ class UserPostDataTransformer
 
     public function transform(UserDto $data): User
     {
+
         $user = new User();
         $user->setFirstname($data->getFirstname());
         $user->setLastname($data->getLastname());
         $user->setEmail($data->getEmail());
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $data->getPassword()));
+        $user->setFile($data->getFile());
 
         return $user;
     }

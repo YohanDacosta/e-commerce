@@ -7,6 +7,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use App\Validator\Constraints as AppAssert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 final class UserDto
 {
@@ -47,6 +49,18 @@ final class UserDto
             ->addViolation();
         }
     }
+
+    #[Vich\UploadableField(mapping: 'user', fileNameProperty: 'filePath')]
+    #[Assert\NotBlank(message: "The file field should not be blank.", groups: ['user:file'])]
+    #[Assert\File(
+        maxSize: "2M",
+        mimeTypes: ["image/jpeg", "image/png"],
+        mimeTypesMessage: "Only images of type JPG o PNG.",
+        maxSizeMessage: "The image must not be major than 2MB.",
+        groups: ['user:create', 'user:file']
+    )]
+    #[Groups(groups: ['user:create', 'user:file'])]
+    public ?File $file = null;
 
     public function getFirstname(): ?string
     {
@@ -106,5 +120,10 @@ final class UserDto
         $this->confirmPassword = $confirmPassword;
 
         return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
     }
 }

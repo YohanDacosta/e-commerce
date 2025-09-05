@@ -2,7 +2,7 @@
 
 namespace App\State\Processor\User;
 
-use App\Dto\Api\UserDto;
+use App\Dto\UserDto;
 use App\DataTransformer\Api\User\UserPostDataTransformer;
 use App\State\Processor\User\PersistProcessorInterface;
 use ApiPlatform\Metadata\Operation;
