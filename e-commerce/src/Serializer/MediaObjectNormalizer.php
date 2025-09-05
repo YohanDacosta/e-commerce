@@ -2,6 +2,7 @@
 
 namespace App\Serializer;
 
+use App\Entity\User;
 use App\Entity\Product;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -33,13 +34,14 @@ class MediaObjectNormalizer implements NormalizerInterface
       return false;
     }
 
-    return $data instanceof Product;
+    return $data instanceof Product || $data instanceof User;
   }
 
   public function getSupportedTypes(?string $format): array
   {
     return [
       Product::class => true,
+      User::class => true
     ];
   }
 }

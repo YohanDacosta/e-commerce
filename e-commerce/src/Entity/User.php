@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\UserUploadController;
 use App\State\Processor\User\UserPatchProcessor;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -36,6 +37,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             validationContext: ['groups' => ['user:create']],
             denormalizationContext: ['groups' => ['user:create']],
     	),
+        new Post(
+            uriTemplate: '/user/file/update',
+            controller: UserUploadController::class,
+            deserialize: true
+        ),
         new Patch(
             input: UserDto::class,
         	processor: UserPatchProcessor::class,

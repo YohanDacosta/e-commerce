@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\ProductService;
+use App\Service\UserService;
 
-class ProductUploadController extends AbstractController
+class UserUploadController extends AbstractController
 {
     public function __construct(
-        private ProductService $productService
+        private UserService $userService
     )
     {}
 
@@ -31,7 +31,7 @@ class ProductUploadController extends AbstractController
             throw new Exception\BadRequestHttpException('The ID format is invalid.');
         }
 
-        $errors = $this->productService->validateProductDto($file);
+        $errors = $this->userService->validateUserDto($file);
 
         if ($errors) {
             return new JsonResponse([
@@ -43,13 +43,14 @@ class ProductUploadController extends AbstractController
             );
         }
 
-        $product = $this->productService->updateUploadFile($file, Uuid::fromString($id));
+        $user = $this->userService->updateUploadFile($file, Uuid::fromString($id));
 
         return $this->json(
-            $product,
+            $user,
             Response::HTTP_OK,
             [],
-            ['groups' => ['product:read']]
+            ['groups' => ['user:read']]
         );
     }
+
 }
