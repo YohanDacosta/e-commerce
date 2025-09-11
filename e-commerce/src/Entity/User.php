@@ -23,6 +23,8 @@ use App\State\Processor\User\UserPatchProcessor;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -52,6 +54,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ],
     normalizationContext: ['groups' => ['user:read']],
 )]
+
+#[UniqueEntity('email', message: 'This email "{{ value }}" is already in use.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -59,24 +63,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?Uuid $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: 'Email should not be blank.')]
+    #[Assert\Email(message: 'The email field {{ value }} is not a valid email.')]
+    #[Groups(['user:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 100)]
-     #[Groups(groups: ['user:read', 'user:write'])]
+    #[Assert\NotBlank(message: 'The firstname field should not be blank.')]
+    #[Groups(groups: ['user:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 200)]
-     #[Groups(groups: ['user:read', 'user:write'])]
+    #[Assert\NotBlank(message: 'The lastname field should not be blank.')]
+    #[Groups(groups: ['user:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(groups: ['user:write'])]
+    #[Assert\NotBlank(message: 'The password field should not be blank.')]
+    #[Assert\Length(min: 8)]
     private ?string $password = null;
 
     #[SerializedName('password')] 
-    #[Groups(['user:write'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column]
@@ -93,6 +101,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[Vich\UploadableField(mapping: 'user', fileNameProperty: 'filePath')]
+    #[Assert\NotBlank(message: "The file field should not be blank.", groups: ['user:file'])]
+    #[Assert\File(
+        maxSize: "2M",
+        mimeTypes: ["image/jpeg", "image/png"],
+        mimeTypesMessage: "Only images of type JPG o PNG.",
+        maxSizeMessage: "The image must not be major than 2MB.",
+        groups: ['user:create', 'user:file']
+    )]
     private ?File $file = null;
 
     #[ApiProperty(writable: false)]
@@ -132,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): static
+    public function setFirstname(?string $firstname): static
     {
         $this->firstname = $firstname;
 

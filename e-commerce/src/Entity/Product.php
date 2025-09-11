@@ -11,7 +11,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Controller\ProductUploadController;
 use App\Repository\ProductRepository;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use ApiPlatform\Metadata\ApiProperty;
@@ -31,11 +30,6 @@ use ApiPlatform\Metadata\Post;
         new Get(),
         new Post(
             validationContext: ['groups' => ['product:create']],
-        ),
-        new Post(
-            uriTemplate: '/product/file/update',
-            controller: ProductUploadController::class,
-            deserialize: false
         ),
         new Patch(
             validationContext: ['groups' => ['product:update']],

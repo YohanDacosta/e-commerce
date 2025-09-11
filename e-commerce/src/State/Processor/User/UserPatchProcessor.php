@@ -3,7 +3,7 @@
 namespace App\State\Processor\User;
 
 use App\Entity\User; 
-use App\Dto\Api\UserDto;
+use App\Dto\UserDto;
 use App\DataTransformer\Api\User\UserPatchDataTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

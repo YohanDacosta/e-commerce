@@ -40,6 +40,11 @@ class Category
     #[Groups(groups: ['category:read'])]
     private Collection $product;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function __construct()
     {
         $this->id = Uuid::v4();

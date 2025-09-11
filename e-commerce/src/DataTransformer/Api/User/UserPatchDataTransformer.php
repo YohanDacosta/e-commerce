@@ -3,7 +3,7 @@
 namespace App\DataTransformer\Api\User;
 
 use App\Entity\User;
-use App\Dto\Api\UserDto;
+use App\Dto\UserDto;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use ApiPlatform\Validator\ValidatorInterface;
 
